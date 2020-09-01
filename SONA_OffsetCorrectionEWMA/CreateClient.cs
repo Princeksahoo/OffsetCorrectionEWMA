@@ -31,26 +31,26 @@ namespace SONA_OffsetCorrectionEWMA
         private readonly ushort HoldingRegisterForCommunictaion = 600;
 
         #region Holding Registers For Offset Correction Process
-        private readonly ushort HoldingRegForReadDataFlag = 605;//606;
-        private readonly ushort HoldingRegForPartID = 608;//609;
-        private readonly ushort HoldingRegForSerialNo = 606;//607;
-        private readonly ushort HoldingRegForACK = 607;//608;
-        private readonly ushort HoldingRegForOperationID = 609;//610;
-        private readonly ushort HoldingRegForDimension = 610;//611;
-        private readonly ushort HoldingRegForMean = 611;//612;
-        private readonly ushort HoldingRegForLambda = 613;//614;
-        private readonly ushort HoldingRegForL = 615;//616;
-        private readonly ushort HoldingRegForSigma = 617;//618;
-        private readonly ushort HoldingRegForMeasuredVal = 619;//620;
-        private readonly ushort HoldingRegForEWMA = 621;//622;
-        private readonly ushort HoldingRegForLCL = 623;//624;
-        private readonly ushort HoldingRegForUCL = 625;//626;
-        private readonly ushort HoldingRegForCorrectionVal = 627;//628;
-        private readonly ushort HoldingRegForMaxCorrectionStep = 629;//630;
-        private readonly ushort HoldingRegForMeasuredDate = 631;//632;
-        private readonly ushort HoldingRegForMeasuredTime = 633;//634;
-        private readonly ushort HoldingRegisterForIterationCount = 600;//601;
-        private readonly ushort HoldingRegisterForResetBit = 602;//603;
+        private readonly ushort HoldingRegForReadDataFlag = 605;
+        private readonly ushort HoldingRegForPartID = 608;
+        private readonly ushort HoldingRegForSerialNo = 606;
+        private readonly ushort HoldingRegForACK = 607;
+        private readonly ushort HoldingRegForOperationID = 609;
+        private readonly ushort HoldingRegForDimension = 610;
+        private readonly ushort HoldingRegForMean = 611;
+        private readonly ushort HoldingRegForLambda = 613;
+        private readonly ushort HoldingRegForL = 615;
+        private readonly ushort HoldingRegForSigma = 617;
+        private readonly ushort HoldingRegForMeasuredVal = 619;
+        private readonly ushort HoldingRegForEWMA = 621;
+        private readonly ushort HoldingRegForLCL = 623;
+        private readonly ushort HoldingRegForUCL = 625;
+        private readonly ushort HoldingRegForCorrectionVal = 627;
+        private readonly ushort HoldingRegForMaxCorrectionStep = 629;
+        private readonly ushort HoldingRegForMeasuredDate = 631;
+        private readonly ushort HoldingRegForMeasuredTime = 633;
+        private readonly ushort HoldingRegisterForIterationCount = 600;
+        private readonly ushort HoldingRegisterForResetBit = 602;
         #endregion
         public CreateClient(MachineInfoDTO machine)
         {
