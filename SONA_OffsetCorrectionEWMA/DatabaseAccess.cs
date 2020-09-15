@@ -72,11 +72,11 @@ namespace SONA_OffsetCorrectionEWMA
 			return protocol;
 		}
 
-        internal static void InsertDataToSPCAutoData(string mc, int partID, int operationID, string Opr, int dimension, float meanVal, float lambdaVal, float lVal, float sigmaVal, float measuredValue, float eWMAVal, float lCLVal, float uCLVal, float correctionValue, float maxCorrectionStep, DateTime measuredDateTime, int iterationCount)
+        internal static void InsertDataToSPCAutoData(string mc, int partID, int operationID, string Opr, int dimension, float meanVal, float lambdaVal, float lVal, float sigmaVal, float measuredValue, float eWMAVal, float lCLVal, float uCLVal, float correctionValue, float maxCorrectionStep, DateTime measuredDateTime, int iterationCount,int ngComp,int altCorrection)
         {
 			SqlConnection conn = ConnectionManager.GetConnection();
 			SqlCommand cmd = null;
-			string query = @"Insert into SPCAutoData (Mc, Comp, Opn, Opr, Dimension, Value, Timestamp, BatchTS, CorrectionValue, BatchID, Lambda, Sigma, EWMA_Zi, L, LCL, UCL, Mean, MaxCorrectionStep) values (@mc, @comp, @opn, @opr, @dimension, @measuredValueXi, @measuredDateTime, @BatchTS, @correctionValue, @BatchID, @lambda, @sigma, @ewmaZi, @l, @lcl, @ucl, @mean, @maxCorrectionStep)";
+			string query = @"Insert into SPCAutoData (Mc, Comp, Opn, Opr, Dimension, Value, Timestamp, BatchTS, CorrectionValue, BatchID, Lambda, Sigma, EWMA_Zi, L, LCL, UCL, Mean, MaxCorrectionStep,NG_Component,Alternate_Correction) values (@mc, @comp, @opn, @opr, @dimension, @measuredValueXi, @measuredDateTime, @BatchTS, @correctionValue, @BatchID, @lambda, @sigma, @ewmaZi, @l, @lcl, @ucl, @mean, @maxCorrectionStep, @ng, @alt)";
             try
             {
 				cmd = new SqlCommand(query, conn);
@@ -85,19 +85,21 @@ namespace SONA_OffsetCorrectionEWMA
 				cmd.Parameters.AddWithValue("@opn", operationID);
 				cmd.Parameters.AddWithValue("@opr", Opr);
 				cmd.Parameters.AddWithValue("@dimension", dimension);
-				cmd.Parameters.AddWithValue("@mean", meanVal);
-				cmd.Parameters.AddWithValue("@lambda", lambdaVal);
-				cmd.Parameters.AddWithValue("@l", lVal);
-				cmd.Parameters.AddWithValue("@sigma", sigmaVal);
-				cmd.Parameters.AddWithValue("@measuredValueXi", measuredValue);
-				cmd.Parameters.AddWithValue("@ewmaZi", eWMAVal);
-				cmd.Parameters.AddWithValue("@lcl", lCLVal);
-				cmd.Parameters.AddWithValue("@ucl", uCLVal);
-				cmd.Parameters.AddWithValue("@correctionValue", correctionValue);
+				cmd.Parameters.AddWithValue("@mean", meanVal.ToString("00.0000"));
+				cmd.Parameters.AddWithValue("@lambda", lambdaVal.ToString("00.0000"));
+				cmd.Parameters.AddWithValue("@l", lVal.ToString("00.0000"));
+				cmd.Parameters.AddWithValue("@sigma", sigmaVal.ToString("00.0000"));
+				cmd.Parameters.AddWithValue("@measuredValueXi", measuredValue.ToString("00.0000"));
+				cmd.Parameters.AddWithValue("@ewmaZi", eWMAVal.ToString("00.0000"));
+				cmd.Parameters.AddWithValue("@lcl", lCLVal.ToString("00.0000"));
+				cmd.Parameters.AddWithValue("@ucl", uCLVal.ToString("00.0000"));
+				cmd.Parameters.AddWithValue("@correctionValue", correctionValue.ToString("00.0000"));
 				cmd.Parameters.AddWithValue("@maxCorrectionStep", maxCorrectionStep);
 				cmd.Parameters.AddWithValue("@measuredDateTime", measuredDateTime.ToString("yyyy-MM-dd HH:mm:ss"));
 				cmd.Parameters.AddWithValue("@BatchTS", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 				cmd.Parameters.AddWithValue("@BatchID", iterationCount);
+				cmd.Parameters.AddWithValue("@ng", ngComp);
+				cmd.Parameters.AddWithValue("@alt", altCorrection);
 				int result=cmd.ExecuteNonQuery();
 
                 if (result >= 0)

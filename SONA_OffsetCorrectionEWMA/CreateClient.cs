@@ -49,6 +49,8 @@ namespace SONA_OffsetCorrectionEWMA
         private readonly ushort HoldingRegForMaxCorrectionStep = 629;
         private readonly ushort HoldingRegForMeasuredDate = 631;
         private readonly ushort HoldingRegForMeasuredTime = 633;
+        private readonly ushort HoldingRegForNGComponent = 635;
+        private readonly ushort HoldingRegForAltCorrecting = 636;
         private readonly ushort HoldingRegisterForIterationCount = 600;
         private readonly ushort HoldingRegisterForResetBit = 602;
         #endregion
@@ -230,6 +232,10 @@ namespace SONA_OffsetCorrectionEWMA
                     CorrectionValue = GetFloat(Output);
                     Output = master.ReadHoldingRegisters(HoldingRegForMaxCorrectionStep, (ushort)2);
                     MaxCorrectionStep = GetFloat(Output);
+                    Output = master.ReadHoldingRegisters(HoldingRegForNGComponent, (ushort)1);
+                    int ngComponent = Output[0];
+                    Output = master.ReadHoldingRegisters(HoldingRegForAltCorrecting, (ushort)1);
+                    int altCorrection = Output[0];
 
                     Output = master.ReadHoldingRegisters(HoldingRegForMeasuredDate, (ushort)2);
                     string MeasuredDate = ModbusUtility.GetUInt32(Output[1], Output[0]).ToString("00000000");
@@ -237,9 +243,9 @@ namespace SONA_OffsetCorrectionEWMA
                     string MeasuredTime = ModbusUtility.GetUInt32(Output[1], Output[0]).ToString("000000");
                     MeasuredDateTime = DateTime.ParseExact(string.Format("{0}{1}", MeasuredDate, MeasuredTime), "yyyyMMddHHmmss", null);
 
-                    Logger.WriteDebugLog(string.Format("Data Received : MC-{0} PartID-{1} Operation-{2} Operator-{3} Dimension-{4} Mean-{5} Lambda-{6} L-{7} Sigma-{8} Measured Value-{9} EWMA-{10} LCL-{11} UCL-{12} Correction Value-{13} Max Correction Step-{14} Measured DateTime-{15} Iteration Count-{16}", this._interfaceId, PartID, OperationID, "1", Dimension, MeanVal, LambdaVal, LVal, SigmaVal, MeasuredValue, EWMAVal, LCLVal, UCLVal, CorrectionValue, MaxCorrectionStep, MeasuredDateTime.ToString("dd-MMM-yyyy HH:mm:ss"), IterationCount));
+                    Logger.WriteDebugLog(string.Format("Data Received : MC-{0} PartID-{1} Operation-{2} Operator-{3} Dimension-{4} Mean-{5} Lambda-{6} L-{7} Sigma-{8} Measured Value-{9} EWMA-{10} LCL-{11} UCL-{12} Correction Value-{13} Max Correction Step-{14} Measured DateTime-{15} Iteration Count-{16}", this._interfaceId, PartID, OperationID, "1", Dimension, MeanVal.ToString("00.0000"), LambdaVal.ToString("00.0000"), LVal.ToString("00.0000"), SigmaVal.ToString("00.0000"), MeasuredValue.ToString("00.0000"), EWMAVal.ToString("00.0000"), LCLVal.ToString("00.0000"), UCLVal.ToString("00.0000"), CorrectionValue.ToString("00.0000"), MaxCorrectionStep.ToString("00.0000"), MeasuredDateTime.ToString("dd-MMM-yyyy HH:mm:ss"), IterationCount));
 
-                    DatabaseAccess.InsertDataToSPCAutoData(this._interfaceId, PartID, OperationID,"1", Dimension, MeanVal, LambdaVal, LVal, SigmaVal, MeasuredValue, EWMAVal, LCLVal, UCLVal, CorrectionValue, MaxCorrectionStep, MeasuredDateTime, IterationCount);
+                    DatabaseAccess.InsertDataToSPCAutoData(this._interfaceId, PartID, OperationID,"1", Dimension, MeanVal, LambdaVal, LVal, SigmaVal, MeasuredValue, EWMAVal, LCLVal, UCLVal, CorrectionValue, MaxCorrectionStep, MeasuredDateTime, IterationCount,ngComponent,altCorrection);
 
                     master.WriteSingleRegister(HoldingRegForACK, (ushort)SlNo);
                     master.WriteSingleRegister(HoldingRegForReadDataFlag, (ushort)2);
